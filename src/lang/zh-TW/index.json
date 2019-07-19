@@ -77,7 +77,7 @@
   "datatype": "資料型態",
   "datatypes": {
     "mysql": {
-      "BIGINT": "An integer. When signed (allows negative) length is -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, otherwise the max is 18,446,744,073,709,551,615.",
+      "BIGINT": "一個整數。若帶符號時(允許負值) 長度為-9,223,372,036,854,775,808到9,223,372,036,854,775,807，否則最大值為18,446,74,073,709,551,615",
       "BOOLEAN": "True or false. Is saved as either 1 or 0 respectively.",
       "CHAR": "A fixed-length non-binary string right-padded with spaces. Length can be 0 to 255 characters.",
       "DATE": "A date. Allows `1000-01-01` to `9999-12-31`.",
@@ -91,8 +91,8 @@
       "MEDIUMTEXT": "A string with a max length of 16,777,215 characters.",
       "SMALLINT": "An integer. When signed (allows negative) length is -32,768 to 32,767, otherwise the max is 65,535.",
       "TEXT": "A string with a max length of 65,535 characters.",
-      "TIME": "A time. Allows `-838:59:59` to `838:59:59`.",
-      "TIMESTAMP": "A date and time. Allows `1970-01-01 00:00:01` UTC to `2038-01-19 03:14:07` UTC.",
+      "TIME": "一個時間。允許 `-838:59:59` to `838:59:59`.",
+      "TIMESTAMP": "一個日期時間。允許 `1970-01-01 00:00:01` UTC to `2038-01-19 03:14:07` UTC.",
       "TINYINT": "An integer. When signed (allows negative) length is -128 to 127, otherwise the max is 255.",
       "TINYTEXT": "A string with a max length of 255 characters.",
       "VARCHAR": "A variable-length non-binary string. Length can be 0 to 65,535 characters (MySQL 5.0.3+).",
