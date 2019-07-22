@@ -392,10 +392,14 @@ export default {
 
       Object.assign(params, this.viewQuery);
 
-      if (this.viewQuery && this.viewQuery.fields)
-        params.fields = params.fields.split(',').map(field => `${field}.*`).join(',');
-      else
-        params.field = "*.*";
+      if (this.viewQuery && this.viewQuery.fields) {
+        params.fields = params.fields
+          .split(",")
+          .map(field => `${field}.*`)
+          .join(",");
+
+        if (!params.fields.includes("id")) params.fields += ",id";
+      } else params.field = "*.*";
 
       if (this.searchQuery) {
         params.q = this.searchQuery;
