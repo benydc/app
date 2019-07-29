@@ -398,8 +398,12 @@ export default {
           .map(field => `${field}.*`)
           .join(",");
 
-        if (!params.fields.includes("id")) params.fields += ",id";
-      } else params.field = "*.*";
+        if (!params.fields.includes(this.primaryKeyField)) {
+          params.fields += "," + this.primaryKeyField;
+        }
+      } else {
+        params.field = "*.*";
+      }
 
       if (this.searchQuery) {
         params.q = this.searchQuery;
