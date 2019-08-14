@@ -44,7 +44,7 @@
             <div v-if="sortable" class="sort-column" :class="{ disabled: !manualSortActive }">
               <v-icon v-if="!readonly" name="drag_handle" class="drag-handle" />
             </div>
-            <div v-for="field in visibleFields" :key="field.field">
+            <div v-for="field in visibleFields" :key="field.field" class="field-preview">
               <v-ext-display
                 :interface-type="field.interface"
                 :name="field.field"
@@ -129,8 +129,8 @@
 
 <script>
 import mixin from "@directus/extension-toolkit/mixins/interface";
-import { diff } from "deep-object-diff";
 import shortid from "shortid";
+import { diff } from "deep-object-diff";
 
 export default {
   name: "InterfaceOneToMany",
@@ -427,6 +427,24 @@ export default {
           if (before) {
             const delta = diff(before, after);
 
+            // For every nested field, we only want to stage the changed values, hence the delta above
+            // HOWEVER, there is one field type where we _don't_ want to only save the changes: JSON
+            // For a nested JSON record, we want to save the whole new state of the object, instead of
+            // just the values that changed, seeing it will override the saved value with a new Object
+            // only containing the changes.
+            // In order to achieve that, we'll loop over every key in the delta, and use the "full"
+            // after value in case the delta field is a JSON type
+            _.forEach(delta, (value, key) => {
+              const fieldInfo = this.relatedCollectionFields[key];
+              if (!fieldInfo) return;
+
+              const type = fieldInfo.type.toLowerCase();
+
+              if (type === "json") {
+                delta[key] = after[key];
+              }
+            });
+
             if (Object.keys(delta).length > 0) {
               const newVal = {
                 [this.relatedPrimaryKeyField]: before[this.relatedPrimaryKeyField]
@@ -521,6 +539,7 @@ export default {
     > div {
       padding: 3px 5px;
       flex-basis: 200px;
+      max-width: 200px;
     }
   }
 
@@ -531,6 +550,7 @@ export default {
     & > button {
       padding: 3px 5px 2px;
       flex-basis: 200px;
+      max-width: 200px;
     }
   }
 
@@ -607,5 +627,10 @@ export default {
       [start] minmax(0, var(--column-width)) [half] minmax(0, var(--column-width))
       [full];
   }
+}
+
+.remove {
+  position: absolute;
+  right: 10px;
 }
 </style>

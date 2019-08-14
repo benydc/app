@@ -49,6 +49,7 @@
         <div class="head">
           <!-- Checkboxes -->
           <span />
+          <span v-if="collection === 'directus_files'">{{ $t("file") }}</span>
           <span v-for="field in fields" :key="field">{{ $helpers.formatTitle(field) }}</span>
         </div>
 
@@ -72,6 +73,17 @@
               :name="isChecked(item[primaryKeyField]) ? 'check_box' : 'check_box_outline_blank'"
             />
           </div>
+
+          <span v-if="collection === 'directus_files'">
+            <v-ext-display
+              interface-type="file"
+              name="thumbnail"
+              collection="directus_files"
+              type="JSON"
+              datatype="TEXT"
+              :value="item"
+            />
+          </span>
 
           <span v-for="fieldInfo in fieldsWithInfo" :key="uid + '_' + fieldInfo.field">
             <v-ext-display
@@ -223,7 +235,7 @@ export default {
 
     this.fetchItems();
 
-    this.setSearchQuery = _.debounce(this.setSearchQuery, 200);
+    this.setSearchQuery = _.debounce(this.setSearchQuery, 550);
 
     // Fetch the total number of items in this collection, so we can accurately render the load more
     // button
@@ -264,15 +276,19 @@ export default {
         params.filters = formatFilters(this.filters);
       }
 
-      if (this.fields.length > 0) {
+      if (this.collection === "directus_files") {
+        params.fields = ["*"];
+      } else if (this.fields.length > 0) {
         params.fields = _.clone(this.fields);
+      } else {
+        params.fields = []; // ISSUE#1865 Fixed Define the blank fields array to push the data.
       }
 
       let sortString = "";
       if (this.sortDirection === "desc") sortString += "-";
-      sortString += this.sortField;
+      if (this.sortField) sortString += this.sortField;
 
-      params.sort = sortString;
+      if (sortString) params.sort = sortString;
 
       // No matter what, always fetch the primary key as that's used for the selection
       params.fields.push(this.primaryKeyField);
@@ -284,6 +300,7 @@ export default {
           this.moreItemsAvailable = items.length === 200;
 
           if (options.replace) return (this.items = items);
+
           return (this.items = [...this.items, ...items]);
         })
         .catch(error => (this.error = error))
@@ -354,6 +371,7 @@ export default {
   display: block;
   top: 0px;
   font-weight: 500;
+  background-color: var(--white);
 }
 .items .head > * {
   display: table-cell;
@@ -397,6 +415,7 @@ export default {
   border: none;
   border-radius: 0;
   padding: 8px 0 8px 32px;
+  appearance: none;
 }
 .search-sort input[type="search"]::placeholder {
   color: var(--lighter-gray);

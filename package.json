@@ -1,6 +1,6 @@
 {
   "name": "directus",
-  "version": "7.7.0",
+  "version": "7.8.0",
   "private": true,
   "description": "Directus is an Open-Source Headless CMS & API for Managing Custom Databases",
   "author": "Rijk van Zanten <rijk@rngr.org>",
@@ -13,6 +13,7 @@
     "storybook:dev": "vue-cli-service storybook:serve -p 6006 -c ./.storybook -s ./public"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^1.0.0",
     "@directus/extension-toolkit": "0.3.0",
     "@directus/format-title": "^2.3.1",
     "@directus/sdk-js": "^5.3.4",
@@ -32,7 +33,7 @@
     "jsonlint-mod": "^1.7.4",
     "leaflet": "^1.5.1",
     "lodash": "^4.17.14",
-    "marked": "^0.6.3",
+    "marked": "^0.7.0",
     "medium-editor": "^5.23.3",
     "micromustache": "^5.4.0",
     "mousetrap": "^1.6.3",
